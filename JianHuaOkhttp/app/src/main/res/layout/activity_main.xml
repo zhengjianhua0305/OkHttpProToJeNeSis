@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="200dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_show"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="数据显示" />
+
+            <ImageView
+                android:id="@+id/iv_show"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btn_sync_get"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:onClick="SyncGet"
+                android:text="Get同步请求" />
+
+            <Button
+                android:id="@+id/btn_async_get"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:onClick="AsyncGet"
+                android:text="Get异步请求" />
+
+            <Button
+                android:id="@+id/btn_seton_request_one"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:onClick="SetOnRequestOne"
+                android:text="配置单个请求" />
+
+            <Button
+                android:id="@+id/btn_test_handler"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:onClick="TestHandler"
+                android:text="Handler更新UI" />
+
+            <Button
+                android:id="@+id/btn_test_run_on_ui"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:onClick="TestRunOnUiThread"
+                android:text="runOnUiThread更新UI" />
+
+            <Button
+                android:id="@+id/btn_test_view_post"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:onClick="TestViewPost"
+                android:text="View.Post" />
+
+            <Button
+                android:id="@+id/btn_test_getdata_by_hashmap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:onClick="TestGetDataByHashMap"
+                android:text="通过传递参数来获取数据" />
+
+            <Button
+                android:id="@+id/btn_test_parse_object_from"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:onClick="TestParseObjectForm"
+                android:text="解析JSON" />
+
+            <Button
+                android:id="@+id/btn_test_auto_cancel_request"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:onClick="TestAutoCancelRequest"
+                android:text="自动取消同步请求" />
+
+            <Button
+                android:id="@+id/test_auto_cancle_async_request"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:onClick="TestAutoCancleAsyncRequest"
+                android:text="自动取消异步请求" />
+
+            <Button
+                android:id="@+id/btn_test_download_file"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:onClick="TestDownloadFile"
+                android:text="自动下载文件" />
+
+            <Button
+                android:id="@+id/btn_test_bitmap_decodestream"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:onClick="TestBitMapDecodeStream"
+                android:text="BitMap解码图片" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="使用日志拦截器"
+                android:onClick="TestUseLogInterceptor"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="请求头"
+                android:onClick="TestHeaders"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="使用缓存"
+                android:onClick="TestUseCache"
+                android:layout_gravity="center"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="使用拦截器支持缓存任意网页"
+                android:layout_gravity="center"
+                android:onClick="TestCacheAnyData"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="TestFinalCache"
+                android:layout_gravity="center"
+                android:text="缓存终极版"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="压缩请求体"
+                android:onClick="TestCompressRequest"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

@@ -1,0 +1,302 @@
+网络通信技术
+
+~~##
+
+1.OkHttp框架
+
+依赖：implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+
+
+//同步get请求：
+    public void SyncGet(View view){
+        new Thread(new Runnable(){
+            @Override
+            public void run(){
+                 OkHttpClint client = new OkHttpClient();
+            Request request = new Request.Builder()
+                            .url("http://www.baidu.com")
+                            .build();
+            Response response = client.newCall(request).execute();
+            String result = response.body().string();
+            runOnUiThread(new Runnable(){
+                @Override
+                public void run(){
+                    tv_show.setText(result);
+                }
+             });
+            }
+        }).start();
+    }
+
+
+//异步Get请求
+    public void AsyncGet(View view){
+        new Thread(new Runnable(){
+            @Override
+            public void run(){
+                OkHttpClient client = new OkHttpClient();
+                Request request = new Request.Builder()
+                                .url("http://www.baidu.com")
+                                .build();
+                client.newCall(request).enqueue(new CallBack(){
+
+                    @Override
+                    public void onFailure(Call call,IOException e){
+                        showThreadInfo(e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onResponse(Call call,Response response){
+                        final String result = response.body().string();
+                        showThreadInfo(result);
+                    }
+                });
+            }
+        }).start();
+    }
+
+    private void showThreadInfo(final String sss){
+        runOnUiThread(new Runable(){
+            @Override
+            public void run(){
+                tv_show.setText(sss);
+            }
+        });
+    }
+
+//OkHttpClient配置
+    //全局配置
+    private OkHttpClient client = new OkHttpClient()
+                                .connectTimeout(30.TimeUnit.SECONDS)
+                                .writeTimeout(30,TimeUnit.SECONDS)
+                                .readTimeout(30,TimeUnit.SECONDS)
+                                .build();
+    //单个配置
+    public void SetOnRequestOne(View view){
+        new Thread(new Runnable(){
+            @Override
+            public void run(){
+                OkHttpClient copy = client.newBuilder()
+                                .readTimeout(50,TimeUnit.SECONDS)
+                                .build();
+                Request request = new Request.Builder()
+                                .url("http://www.baidu.com")
+                                .build();
+                try{
+                    Response response = copy.newCall(request).execute();
+                    final String result = response.body().string();
+                    runOnUiThread(new Runnable(){
+                        @Override
+                        public void run(){
+                        tv_show.setTexx(result);
+                        }
+                    }
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+多种方法在线程中更新UI
+
+·通过Handler传递消息更新Ui
+·通过runOnUiThread更新Ui
+·通过View.post更新Ui
+
+//通过Handler传递消息更新Ui
+
+private Handler handler = new Handler(){
+    @Override
+    public void handlerMessage(Message msg){
+        super.handlerMessage(msg);
+        tv_show.setText(msg.obj.toString());
+    }
+}
+public void TestHandler(View view){
+    new Thread(new Runnable(){
+        Request request = new Request.Builder()
+                        .url("http://www.baidu.com")
+                        .build();
+        client.newCall(request).enqueue(new Callback(){
+            @Override
+            public void onFailure(Call call,IOException e){
+
+            }
+            @Override
+            public void onResponse(Call call,Response response){
+                handler.obtainMessage(0,response.bodu().string()).sendToTarget();
+            }
+        }
+    }).start();
+}
+
+//通过runOnUiThread更新Ui
+
+public void TestRunOnUiThread(View view){
+    new Thread(new Runnable(){
+        Request request = new Request.Builder()
+                        .url("http:wwww.baidu.com")
+                        .build();
+        client.newCall(request).enqueue(new Callbakc(){
+            @Override
+            public void onFailure(Call call,IOException e){
+
+            }
+            @Override
+            public void onResponse(Call call,Response response){
+                final String result = response.body().string();
+                runOnUiThread(new Runnable(){
+                    @Override
+                    public void run(){
+                        tv_show.setText(result);
+                    }
+                });
+            }
+        }
+    }).start();
+}
+
+//通过View.post更新Ui
+
+public void TestViewPost(View view){
+    new Thread(new Runnable(){
+        Request request = new Request.Builder()
+                        .url("http://www.baidu.com")
+                        .build();
+        client.newCall(request).enqueue(new Callback(){
+            @Override
+            public void onFailure(Call call,IOException e){
+                
+            }
+            @Override
+            public voud onResponse(Call call,Response response){
+                final String result = response.body().string();
+                tv_show.post(new Runnable(){
+                    @Override
+                    public void run(){
+                        tv_show.setText(result);
+                    }
+                });
+            }
+        });
+    }).start();
+}
+
+
+OkHttpClient下载文件到/SDCard/a.html和通过BitmapFactory解析远程图片
+
+//通过数据流下载文件
+
+public void TestDownLoadFile(View view){
+    new Thread(new Runable(){
+        Request request = new Request.Builder()
+                        .url("http://www.baidu.com")
+                        .build();
+        Response response = client.newCall(request).execute();
+        InputStream inputstream = null;
+        FileOutputStream fileoutputstream = null;
+        try{
+            if(response.isSuccessful()){
+
+                //将获取的response存储在输入流中inputstream
+                intputstream = response.body().byteStream();
+
+                //创建文件输出流存放在sdcard上
+                fileoutputstream = new FileOutputStream("/sdcard/a.html")
+
+                //文件输入流和输出流都需要借助字节形式来完成
+                byte[] bytes = new byte[4096];
+
+                int len = -1;
+
+                //输入流即为读入
+                while((len=intputstream.read(bytes)!=-1){
+                    //输出流即为读出
+                    fileoutputstream.write(bytes,0,len);
+                }
+            }
+        }catch (IOException e){
+            e.pritStackTrace();
+        }finally{
+            //关闭数据输出流输入流
+            Util.closeQuietly(fileOutputStream);
+            Util.closeQuietly(inputstream);
+        }
+    }).start();
+}
+
+//通过输入流InputStream、BitmapFactory解析图片地址
+
+public void TestBitMapDecodeStream(View view){
+    new Thread(new Runnable(){
+        Request request = new Request.Builder()
+                        .url("https://dss1.bdstatic.com/5aAHeD3nKgcUp2HgoI7O1ygwehsv/media/ch1/jpg/%E4%B8%93%E5%AE%B6%E7%BB%84%E9%80%9A%E6%A0%8F%E5%8D%A1%E7%AA%84%E5%B1%8F-0.jpg")
+                        .build();
+        InputStream inputstream = null;
+        try{
+            Response response = client.newCall(request).execute();
+            if(response.isSuccessful()){
+
+                //将获得的数据存储为输入流
+                inputstream = response.body().byteStream();
+
+                //创建Bitmap工厂，通过 解码输入流 解析图片
+                Bitmap bitmap = BitmapFactory.decodeStream(intputstream);
+
+                //返回主线程更新UI
+                runOnUiThread(new Runnable(){
+                    @Override
+                    public void run(){
+                        iv_show.setImageBitmap(bitmap);
+                    }
+                }
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }finally{
+            //关闭数据输入流
+            Util.closeQuietly(inputstream);
+        }
+    }.start();
+}
+
+
+OkHttp3拦截器Interceptor
+//这一块听得不是很懂
+//先放着
+
+
+OkHttp3请求头和响应头
+
+·使用header方法添加单个key，value请求头，已有的会替换
+
+·使用addHeader是添加请求头，已有的不会替换，继续添加
+
+·使用headers添加Header对象，会替换原来的请求头
+
+·使用removeHeader移除一个请求头
+
+·使用Headers添加会移除所有的请求头
+
+
+OkHttp3缓存策略
+
+·有网络并且缓存可用，读取缓存
+
+·有网络缓存不可用，请求网络
+
+·无网络缓存没过期，读缓存
+
+·无网络缓存过期了，读缓存
+
+
+
+
+2.Async-http请求
+
+3.Gson解析
+
+4.Volley框架
+
+5.Retrofit框架
